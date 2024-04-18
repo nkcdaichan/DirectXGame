@@ -14,6 +14,7 @@ private:
 public:
 	RenderSystem* getRenderSystem();
 	TextureManager* getTextureManager();
+	void getVertexMeshLayoutShaderByteCodeAndSize(void** byte_code, size_t* size);
 public:
 	static GraphicsEngine* get();
 	static void create();

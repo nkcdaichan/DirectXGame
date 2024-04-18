@@ -30,6 +30,10 @@ TextureManager* GraphicsEngine::getTextureManager()
 	return m_tex_manager;
 }
 
+void GraphicsEngine::getVertexMeshLayoutShaderByteCodeAndSize(void** byte_code, size_t* size)
+{
+}
+
 GraphicsEngine::~GraphicsEngine()
 {
 	GraphicsEngine::m_engine = nullptr;
