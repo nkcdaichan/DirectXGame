@@ -92,17 +92,17 @@ void InputSystem::update()
 	}
 }
 
-void InputSystem::addListener(InputListener* listener)
+void InputSystem::addListener(InputListener * listener)
 {
 	m_set_listeners.insert(listener);
 }
 
-void InputSystem::removeListener(InputListener* listener)
+void InputSystem::removeListener(InputListener * listener)
 {
 	m_set_listeners.erase(listener);
 }
 
-void InputSystem::setCursorPosition(const Point& pos)
+void InputSystem::setCursorPosition(const Point & pos)
 {
 	::SetCursorPos(pos.m_x, pos.m_y);
 }

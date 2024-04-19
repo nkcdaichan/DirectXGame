@@ -43,9 +43,9 @@ RenderSystem::RenderSystem()
 
 	m_imm_device_context = std::make_shared<DeviceContext>(m_imm_context, this);
 
-	m_d3d_device->QueryInterface(__uuidof(IDXGIDevice), (void**)&m_dxgi_device);
-	m_dxgi_device->GetParent(__uuidof(IDXGIAdapter), (void**)&m_dxgi_adapter);
-	m_dxgi_adapter->GetParent(__uuidof(IDXGIFactory), (void**)&m_dxgi_factory);
+	m_d3d_device->QueryInterface(__uuidof(IDXGIDevice), (void**)& m_dxgi_device);
+	m_dxgi_device->GetParent(__uuidof(IDXGIAdapter), (void**)& m_dxgi_adapter);
+	m_dxgi_adapter->GetParent(__uuidof(IDXGIFactory), (void**)& m_dxgi_factory);
 }
 
 RenderSystem::~RenderSystem()

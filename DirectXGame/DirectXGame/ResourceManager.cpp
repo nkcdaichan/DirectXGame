@@ -36,7 +36,7 @@ ResourcePtr ResourceManager::createResourceFromFile(const wchar_t* file_path)
 	if (it != m_map_resources.end())
 		return it->second;
 
-	Resource* raw_res = this->createResourceFromFileConcrete(full_path.c_str());
+	Resource * raw_res = this->createResourceFromFileConcrete(full_path.c_str());
 
 	if (raw_res)
 	{

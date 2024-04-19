@@ -108,7 +108,7 @@ public:
 	}
 
 
-	void operator *=(const Matrix4x4& matrix)
+	void operator *=(const Matrix4x4 & matrix)
 	{
 		Matrix4x4 out;
 		for (int i = 0; i < 4; i++)
@@ -123,7 +123,7 @@ public:
 		setMatrix(out);
 	}
 
-	void setMatrix(const Matrix4x4& matrix)
+	void setMatrix(const Matrix4x4 & matrix)
 	{
 		::memcpy(m_mat, matrix.m_mat, sizeof(float) * 16);
 	}

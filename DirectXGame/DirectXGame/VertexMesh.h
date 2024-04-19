@@ -2,7 +2,6 @@
 #include "Vector3D.h"
 #include "Vector2D.h"
 
-
 class VertexMesh
 {
 public:
@@ -15,7 +14,6 @@ public:
 	VertexMesh(const VertexMesh& vertex) :m_position(vertex.m_position), m_texcoord(vertex.m_texcoord)
 	{
 	}
-
 
 	~VertexMesh()
 	{

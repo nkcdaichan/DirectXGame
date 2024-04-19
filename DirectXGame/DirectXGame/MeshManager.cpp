@@ -18,12 +18,12 @@ MeshPtr MeshManager::createMeshFromFile(const wchar_t* file_path)
 
 Resource* MeshManager::createResourceFromFileConcrete(const wchar_t* file_path)
 {
-	Mesh* mash = nullptr;
+	Mesh* mesh = nullptr;
 	try
 	{
-		mash = new Mesh(file_path);
+		mesh = new Mesh(file_path);
 	}
 	catch (...) {}
 
-	return mash;
+	return mesh;
 }
