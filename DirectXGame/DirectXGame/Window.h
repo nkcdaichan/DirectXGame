@@ -15,7 +15,7 @@ public:
 	bool isRun();
 
 	RECT getClientWindowRect();
-
+	RECT getSizeScreen();
 
 	//EVENTS
 	virtual void onCreate();

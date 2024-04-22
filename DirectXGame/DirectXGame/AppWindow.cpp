@@ -20,11 +20,57 @@ struct constant
 	Matrix4x4 m_proj;
 	Vector4D m_light_direction;
 	Vector4D m_camera_position;
+	Vector4D m_light_position = Vector4D(0, 1, 0, 0);
+	float m_light_radius = 4.0f;
+	float m_time = 0.0f;
 };
 
 
 AppWindow::AppWindow()
 {
+}
+
+void AppWindow::render()
+{
+	//CLEAR THE RENDER TARGET 
+	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_swap_chain,
+		0, 0.3f, 0.4f, 1);
+	//SET VIEWPORT OF RENDER TARGET IN WHICH WE HAVE TO DRAW
+	RECT rc = this->getClientWindowRect();
+	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top);
+
+
+
+	//COMPUTE TRANSFORM MATRICES
+	update();
+
+	//RENDER MODEL
+	GraphicsEngine::get()->getRenderSystem()->setRasterizerState(false);
+
+	TexturePtr list_tex[1];
+	list_tex[0] = m_wall_tex;
+	
+	drawMesh(m_mesh, m_vs, m_ps, m_cb, list_tex, 1);
+
+
+
+	//RENDER SKYBOX/SPHERE
+	GraphicsEngine::get()->getRenderSystem()->setRasterizerState(true);
+
+	list_tex[0] = m_sky_tex;
+
+	drawMesh(m_sky_mesh, m_vs, m_sky_ps, m_sky_cb, list_tex, 1);
+
+
+
+	m_swap_chain->present(true);
+
+
+	m_old_delta = m_new_delta;
+	m_new_delta = ::GetTickCount();
+
+	m_delta_time = (m_old_delta) ? ((m_new_delta - m_old_delta) / 1000.0f) : 0;
+	m_time += m_delta_time;
 }
 
 void AppWindow::update()
@@ -42,13 +88,22 @@ void AppWindow::updateModel()
 	m_light_rot_matrix.setIdentity();
 	m_light_rot_matrix.setRotationY(m_light_rot_y);
 
-	m_light_rot_y += 0.707f * m_delta_time;
+	m_light_rot_y += 1.57f * m_delta_time;
 
 	cc.m_world.setIdentity();
 	cc.m_view = m_view_cam;
 	cc.m_proj = m_proj_cam;
 	cc.m_camera_position = m_world_cam.getTranslation();
+
+	float dist_from_origin = 1.0f;
+
+
+	cc.m_light_position = Vector4D(cos(m_light_rot_y) * dist_from_origin, 1.0f, sin(m_light_rot_y) * dist_from_origin, 1.0f);
+
+
+	cc.m_light_radius = m_light_radius;
 	cc.m_light_direction = m_light_rot_matrix.getZDirection();
+	cc.m_time = m_time;
 
 	m_cb->update(GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext(), &cc);
 }
@@ -104,7 +159,8 @@ void AppWindow::updateSkyBox()
 	m_sky_cb->update(GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext(), &cc);
 }
 
-void AppWindow::drawMesh(const MeshPtr& mesh, const VertexShaderPtr& vs, const PixelShaderPtr& ps, const ConstantBufferPtr& cb, const TexturePtr& tex)
+void AppWindow::drawMesh(const MeshPtr& mesh, const VertexShaderPtr& vs, const PixelShaderPtr& ps,
+	const ConstantBufferPtr& cb, const TexturePtr* list_tex, unsigned int num_textures)
 {
 	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setConstantBuffer(vs, cb);
 	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setConstantBuffer(ps, cb);
@@ -113,7 +169,7 @@ void AppWindow::drawMesh(const MeshPtr& mesh, const VertexShaderPtr& vs, const P
 	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setVertexShader(vs);
 	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setPixelShader(ps);
 
-	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setTexture(ps, tex);
+	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setTexture(ps, list_tex, num_textures);
 
 	//SET THE VERTICES OF THE TRIANGLE TO DRAW
 	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setVertexBuffer(mesh->getVertexBuffer());
@@ -137,13 +193,17 @@ void AppWindow::onCreate()
 	Window::onCreate();
 
 	InputSystem::get()->addListener(this);
+    
+	m_play_state = true;
 	InputSystem::get()->showCursor(false);
 
-	m_wood_tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\brick.png");
-	m_sky_tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\sky.jpg");
+	m_wall_tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\wall.jpg");
+	
+
+	m_sky_tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\stars_map.jpg");
 
 
-	m_mesh = GraphicsEngine::get()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\suzanne.obj");
+	m_mesh = GraphicsEngine::get()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\scene.obj");
 	m_sky_mesh = GraphicsEngine::get()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\sphere.obj");
 
 
@@ -155,11 +215,11 @@ void AppWindow::onCreate()
 
 	void* shader_byte_code = nullptr;
 	size_t size_shader = 0;
-	GraphicsEngine::get()->getRenderSystem()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
+	GraphicsEngine::get()->getRenderSystem()->compileVertexShader(L"PointLightVertexShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
 	m_vs = GraphicsEngine::get()->getRenderSystem()->createVertexShader(shader_byte_code, size_shader);
 	GraphicsEngine::get()->getRenderSystem()->releaseCompiledShader();
 
-	GraphicsEngine::get()->getRenderSystem()->compilePixelShader(L"PixelShader.hlsl", "psmain", &shader_byte_code, &size_shader);
+	GraphicsEngine::get()->getRenderSystem()->compilePixelShader(L"PointLightPixelShader.hlsl", "psmain", &shader_byte_code, &size_shader);
 	m_ps = GraphicsEngine::get()->getRenderSystem()->createPixelShader(shader_byte_code, size_shader);
 	GraphicsEngine::get()->getRenderSystem()->releaseCompiledShader();
 
@@ -171,47 +231,23 @@ void AppWindow::onCreate()
 
 	m_cb = GraphicsEngine::get()->getRenderSystem()->createConstantBuffer(&cc, sizeof(constant));
 	m_sky_cb = GraphicsEngine::get()->getRenderSystem()->createConstantBuffer(&cc, sizeof(constant));
+
+
+	m_world_cam.setTranslation(Vector3D(0, 0, -2));
 }
 
 void AppWindow::onUpdate()
 {
 	Window::onUpdate();
-
 	InputSystem::get()->update();
-
-	//CLEAR THE RENDER TARGET 
-	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_swap_chain,
-		0, 0.3f, 0.4f, 1);
-	//SET VIEWPORT OF RENDER TARGET IN WHICH WE HAVE TO DRAW
-	RECT rc = this->getClientWindowRect();
-	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top);
-
-
-
-	//COMPUTE TRANSFORM MATRICES
-	update();
-
-	//RENDER MODEL
-	GraphicsEngine::get()->getRenderSystem()->setRasterizerState(false);
-	drawMesh(m_mesh, m_vs, m_ps, m_cb, m_wood_tex);
-	//RENDER SKYBOX/SPHERE
-	GraphicsEngine::get()->getRenderSystem()->setRasterizerState(true);
-	drawMesh(m_sky_mesh, m_vs, m_sky_ps, m_sky_cb, m_sky_tex);
-
-
-
-	m_swap_chain->present(true);
-
-
-	m_old_delta = m_new_delta;
-	m_new_delta = ::GetTickCount();
-
-	m_delta_time = (m_old_delta) ? ((m_new_delta - m_old_delta) / 1000.0f) : 0;
+	this->render();
+	
 }
 
 void AppWindow::onDestroy()
 {
 	Window::onDestroy();
+	m_swap_chain->SetFullScreen(false, 1, 1);
 }
 
 void AppWindow::onFocus()
@@ -227,6 +263,8 @@ void AppWindow::onKillFocus()
 void AppWindow::onSize()
 {
 	RECT rc = this->getClientWindowRect();
+	m_swap_chain->resize(rc.right, rc.bottom);
+	this->render();
 }
 
 void AppWindow::onKeyDown(int key)
@@ -246,34 +284,48 @@ void AppWindow::onKeyDown(int key)
 		//m_rot_y += 3.14f*m_delta_time;
 		m_rightward = -1.0f;
 	}
-	else if (key == 'D')
+	else if (key == 'O')
 	{
-		//m_rot_y -= 3.14f*m_delta_time;
-		m_rightward = 1.0f;
+		m_light_radius -= 1.0f * m_delta_time;
 	}
+	else if (key == 'P')
+	{
+		m_light_radius += 1.0f * m_delta_time;
+	}
+
+
 }
 
 void AppWindow::onKeyUp(int key)
 {
 	m_forward = 0.0f;
 	m_rightward = 0.0f;
+
+	if (key == 'G')
+	{
+		m_play_state = (m_play_state) ? false : true;
+		InputSystem::get()->showCursor(!m_play_state);
+	}
+	else if (key == 'F')
+	{
+		m_fullscreen_state = (m_fullscreen_state) ? false : true;
+		RECT size_screen = this->getSizeScreen();
+
+		m_swap_chain->SetFullScreen(m_fullscreen_state, size_screen.right, size_screen.bottom);
+	}
 }
 
 void AppWindow::onMouseMove(const Point & mouse_pos)
 {
+	if (!m_play_state) return;
+
 	int width = (this->getClientWindowRect().right - this->getClientWindowRect().left);
 	int height = (this->getClientWindowRect().bottom - this->getClientWindowRect().top);
-
-
 
 	m_rot_x += (mouse_pos.m_y - (height / 2.0f)) * m_delta_time * 0.1f;
 	m_rot_y += (mouse_pos.m_x - (width / 2.0f)) * m_delta_time * 0.1f;
 
-
-
 	InputSystem::get()->setCursorPosition(Point((int)(width / 2.0f), (int)(height / 2.0f)));
-
-
 }
 
 void AppWindow::onLeftMouseDown(const Point & mouse_pos)
