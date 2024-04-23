@@ -78,6 +78,9 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>GameEngine\GraphicsEngine\ResourceManager\MashManager</Filter>
     </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>GameEngine\GraphicsEngine\Material</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -158,6 +161,9 @@
     <ClInclude Include="VertexMesh.h">
       <Filter>GameEngine\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>GameEngine\GraphicsEngine\Material</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="App">
@@ -219,6 +225,9 @@
     </Filter>
     <Filter Include="App\Shaders\PointLightShader">
       <UniqueIdentifier>{dd46bac4-23f3-4ce9-a3ce-d2d02dde54da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\GraphicsEngine\Material">
+      <UniqueIdentifier>{58795843-d6f7-4a88-bcd2-f6f2ab78eeda}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
