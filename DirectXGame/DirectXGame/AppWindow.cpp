@@ -63,6 +63,22 @@ void AppWindow::render()
 	//drawMesh(m_plane_mesh, m_mat);
 
 	m_list_materials.clear();
+	m_list_materials.push_back(m_barrel_mat);
+	m_list_materials.push_back(m_brick_mat);
+	m_list_materials.push_back(m_windows_mat);
+	m_list_materials.push_back(m_wood_mat);
+
+	for(int i = 0; i < 3;i++)
+	{ 
+		for (int j = 0; j < 3; j++)
+		{
+			updateModel(Vector3D(-14.0f + 14.0f * i, 0, -14.0f + 14.0f * j), m_list_materials);
+			drawMesh(m_house_mesh, m_list_materials);
+		}
+    }
+
+
+	m_list_materials.clear();
 	m_list_materials.push_back(m_terrain_mat);
 	updateModel(Vector3D(0, 0, 0), m_list_materials);
 	drawMesh(m_terrain_mesh, m_list_materials);
@@ -226,6 +242,10 @@ void AppWindow::onCreate()
 	m_sky_tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\sky.jpg");
 	m_sand_tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\sand.jpg");
 
+	m_barrel_tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\barrel.jpg");
+	m_brick_tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\house_brick.jpg");
+	m_windows_tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\house_windows.jpg");
+	m_wood_tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\house_wood.jpg");
 
 
 	/*m_mesh = GraphicsEngine::get()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\scene.obj");
@@ -236,6 +256,7 @@ void AppWindow::onCreate()
 
 	m_sky_mesh = GraphicsEngine::get()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\sphere.obj");
 	m_terrain_mesh = GraphicsEngine::get()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\terrain.obj");
+	m_house_mesh = GraphicsEngine::get()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\house.obj");
 
 
 
@@ -261,6 +282,25 @@ void AppWindow::onCreate()
 	m_terrain_mat = GraphicsEngine::get()->createMaterial(m_mat);
 	m_terrain_mat->addTexture(m_sand_tex);
 	m_terrain_mat->setCullMode(CULL_MODE_BACK);
+
+
+
+	m_barrel_mat = GraphicsEngine::get()->createMaterial(m_mat);
+	m_barrel_mat->addTexture(m_barrel_tex);
+	m_barrel_mat->setCullMode(CULL_MODE_BACK);
+
+	m_brick_mat = GraphicsEngine::get()->createMaterial(m_mat);
+	m_brick_mat->addTexture(m_brick_tex);
+	m_brick_mat->setCullMode(CULL_MODE_BACK);
+
+	m_windows_mat = GraphicsEngine::get()->createMaterial(m_mat);
+	m_windows_mat->addTexture(m_windows_tex);
+	m_windows_mat->setCullMode(CULL_MODE_BACK);
+
+	m_wood_mat = GraphicsEngine::get()->createMaterial(m_mat);
+	m_wood_mat->addTexture(m_wood_tex);
+	m_wood_mat->setCullMode(CULL_MODE_BACK);
+
 
 	m_sky_mat = GraphicsEngine::get()->createMaterial(L"PointLightVertexShader.hlsl", L"SkyBoxShader.hlsl");
 	m_sky_mat->addTexture(m_sky_tex);
