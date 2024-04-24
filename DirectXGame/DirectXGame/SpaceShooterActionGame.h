@@ -38,87 +38,62 @@ public:
 public:
 	void render();
 	void update();
-	void updateModel(Vector3D position, const std::vector<MaterialPtr>& list_materials);
+	void updateModel(Vector3D position, Vector3D rotation, Vector3D scale, const std::vector<MaterialPtr>& list_materials);
 	void updateCamera();
+	void updateThirdPersonCamera();
 	void updateSkyBox();
 	void updateLight();
-
+	void updateSpaceship();
 	void drawMesh(const MeshPtr& mesh, const std::vector<MaterialPtr>& list_materials);
 private:
 	SwapChainPtr m_swap_chain;
-	VertexShaderPtr m_vs;
-	PixelShaderPtr m_ps;
-	PixelShaderPtr m_sky_ps;
-	ConstantBufferPtr m_cb;
-	ConstantBufferPtr m_sky_cb;
-	TexturePtr m_wall_tex;
-	TexturePtr m_bricks_tex;
-	TexturePtr m_earth_color_tex;
-	TexturePtr m_earth_spec_tex;
-	TexturePtr m_earth_night_tex;
-	TexturePtr m_clouds_tex;
-	TexturePtr m_sand_tex;
+
+	TexturePtr m_spaceship_tex;
+	MeshPtr m_spaceship_mesh;
+	MaterialPtr m_spaceship_mat;
+
+	TexturePtr m_asteroid_tex;
+	MeshPtr m_asteroid_mesh;
+	MaterialPtr m_asteroid_mat;
+
 	TexturePtr m_sky_tex;
-
-	TexturePtr m_barrel_tex;
-	TexturePtr m_brick_tex;
-	TexturePtr m_windows_tex;
-	TexturePtr m_wood_tex;
-
-
-
-	MeshPtr m_mesh;
-	MeshPtr m_torus_mesh;
-	MeshPtr m_suzanne_mesh;
-	MeshPtr m_plane_mesh;
 	MeshPtr m_sky_mesh;
-	MeshPtr m_terrain_mesh;
-	MeshPtr m_house_mesh;
+    MaterialPtr m_sky_mat;
 
-	MaterialPtr m_mat;
-	MaterialPtr m_bricks_mat;
-	MaterialPtr m_earth_mat;
-	MaterialPtr m_sky_mat;
-	MaterialPtr m_terrain_mat;
-
-	MaterialPtr m_barrel_mat;
-	MaterialPtr m_brick_mat;
-	MaterialPtr m_windows_mat;
-	MaterialPtr m_wood_mat;
-
+	MaterialPtr m_base_mat;
+	
 
 private:
 	long m_old_delta;
 	long m_new_delta;
 	float m_delta_time;
 
-	float m_delta_pos;
-	float m_delta_scale;
-	float m_delta_rot;
+    float m_cam_distance = 14.0f;
+	Vector3D m_cam_rot;
+	Vector3D m_cam_pos;
 
-	float m_rot_x = 0.0f;
-	float m_rot_y = 0.0f;
+	float m_spaceship_speed = 125.0f;
+	Vector3D m_spaceship_pos;
+	Vector3D m_spaceship_rot;
 
-	float m_light_rot_y = 0.0f;
+	float m_delta_mouse_x = 0.0f, m_delta_mouse_y = 0.0f;
 
+	
 
-
-	float m_scale_cube = 1;
 	float m_forward = 0.0f;
 	float m_rightward = 0.0f;
+
+	bool cull = true;
 	Matrix4x4 m_world_cam;
 	Matrix4x4 m_view_cam;
 	Matrix4x4 m_proj_cam;
 
 	float m_time = 0.0f;
-	float m_light_radius = 500.0f;
-	float m_attenumation = 2.0f;
+	bool m_anim = false;
 
 	Matrix4x4 m_light_rot_matrix;
 	bool m_play_state = false;
 	bool m_fullscreen_state = false;
-
 	std::vector<MaterialPtr> m_list_materials;
-
 	Vector4D m_light_position;
 };
