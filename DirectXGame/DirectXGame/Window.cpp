@@ -144,6 +144,10 @@ RECT Window::getClientWindowRect()
 {
 	RECT rc;
 	::GetClientRect(this->m_hwnd, &rc);
+
+	//API関数を利用してマウスカーソルを中央へ
+	::ClientToScreen(this->m_hwnd, (LPPOINT)&rc.left);
+	::ClientToScreen(this->m_hwnd, (LPPOINT)& rc.right);
 	return rc;
 }
 

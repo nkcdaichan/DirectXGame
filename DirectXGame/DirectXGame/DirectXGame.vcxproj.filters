@@ -4,26 +4,32 @@
     <FxCompile Include="VertexMeshLayoutShader.hlsl">
       <Filter>GameEngine\GraphicsEngine</Filter>
     </FxCompile>
-    <FxCompile Include="SkyBoxShader.hlsl">
-      <Filter>App\Shaders</Filter>
-    </FxCompile>
     <FxCompile Include="VertexShader.hlsl">
-      <Filter>App\Shaders\EarthShader</Filter>
+      <Filter>App\OldDemo\Shaders\EarthShader</Filter>
     </FxCompile>
     <FxCompile Include="PixelShader.hlsl">
-      <Filter>App\Shaders\EarthShader</Filter>
+      <Filter>App\OldDemo\Shaders\EarthShader</Filter>
     </FxCompile>
     <FxCompile Include="PointLightVertexShader.hlsl">
-      <Filter>App\Shaders\PointLightShader</Filter>
+      <Filter>App\GrobalShaders\PointLight</Filter>
     </FxCompile>
     <FxCompile Include="PointLightPixelShader.hlsl">
-      <Filter>App\Shaders\PointLightShader</Filter>
+      <Filter>App\GrobalShaders\PointLight</Filter>
+    </FxCompile>
+    <FxCompile Include="DirectionalLightVertexShader.hlsl">
+      <Filter>App\GrobalShaders\DirectionalLight</Filter>
+    </FxCompile>
+    <FxCompile Include="DirectionalLightPixelShader.hlsl">
+      <Filter>App\GrobalShaders\DirectionalLight</Filter>
+    </FxCompile>
+    <FxCompile Include="SkyBoxVertexShader.hlsl">
+      <Filter>App\GrobalShaders\SkyBox</Filter>
+    </FxCompile>
+    <FxCompile Include="SkyBoxPixelShader.hlsl">
+      <Filter>App\GrobalShaders\SkyBox</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AppWindow.cpp">
-      <Filter>App</Filter>
-    </ClCompile>
     <ClCompile Include="DeviceContext.cpp">
       <Filter>GameEngine\GraphicsEngine\RenderSystem\DeviceContext</Filter>
     </ClCompile>
@@ -81,11 +87,14 @@
     <ClCompile Include="Material.cpp">
       <Filter>GameEngine\GraphicsEngine\Material</Filter>
     </ClCompile>
+    <ClCompile Include="AppWindow.cpp">
+      <Filter>App\OldDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="SpaceShooterActionGame.cpp">
+      <Filter>App\SpaceShooterActionGame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AppWindow.h">
-      <Filter>App</Filter>
-    </ClInclude>
     <ClInclude Include="DeviceContext.h">
       <Filter>GameEngine\GraphicsEngine\RenderSystem\DeviceContext</Filter>
     </ClInclude>
@@ -164,6 +173,12 @@
     <ClInclude Include="Material.h">
       <Filter>GameEngine\GraphicsEngine\Material</Filter>
     </ClInclude>
+    <ClInclude Include="AppWindow.h">
+      <Filter>App\OldDemo</Filter>
+    </ClInclude>
+    <ClInclude Include="SpaceShooterActionGame.h">
+      <Filter>App\SpaceShooterActionGame</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="App">
@@ -217,17 +232,32 @@
     <Filter Include="GameEngine\GraphicsEngine\ResourceManager\MashManager">
       <UniqueIdentifier>{b2dbb607-38ed-406d-b3b8-ff4ab99ae97c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="App\Shaders">
-      <UniqueIdentifier>{d50b4abc-714d-48d8-8765-a36b03b008ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="App\Shaders\EarthShader">
-      <UniqueIdentifier>{4c39c240-48d4-4117-960b-0241822555d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="App\Shaders\PointLightShader">
-      <UniqueIdentifier>{dd46bac4-23f3-4ce9-a3ce-d2d02dde54da}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameEngine\GraphicsEngine\Material">
       <UniqueIdentifier>{58795843-d6f7-4a88-bcd2-f6f2ab78eeda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App\OldDemo">
+      <UniqueIdentifier>{ccdb1fd3-0e84-44c3-94bb-e28a80fe3d2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App\OldDemo\Shaders">
+      <UniqueIdentifier>{d50b4abc-714d-48d8-8765-a36b03b008ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App\OldDemo\Shaders\EarthShader">
+      <UniqueIdentifier>{4c39c240-48d4-4117-960b-0241822555d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App\SpaceShooterActionGame">
+      <UniqueIdentifier>{9293a5dc-62e8-4e2c-8004-c7d63404c2a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App\GrobalShaders">
+      <UniqueIdentifier>{b24ffa1d-a906-419a-916f-017570e0dcf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App\GrobalShaders\SkyBox">
+      <UniqueIdentifier>{d9257904-3b0c-4d92-8292-7d9b90b3a7d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App\GrobalShaders\DirectionalLight">
+      <UniqueIdentifier>{7293a674-a83c-4992-9aa8-b9865e4c1861}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App\GrobalShaders\PointLight">
+      <UniqueIdentifier>{dd46bac4-23f3-4ce9-a3ce-d2d02dde54da}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
