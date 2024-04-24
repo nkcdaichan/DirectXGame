@@ -21,6 +21,12 @@ Material::Material(const wchar_t* vertex_shader_path, const wchar_t* pixel_shade
 
 }
 
+Material::Material(const MaterialPtr& material)
+{
+	m_vertex_shader = material->m_vertex_shader;
+	m_pixel_shader = material->m_pixel_shader;
+}
+
 Material::~Material()
 {
 }
