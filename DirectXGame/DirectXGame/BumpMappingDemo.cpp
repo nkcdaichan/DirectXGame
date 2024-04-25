@@ -236,6 +236,7 @@ void BumpMappingDemo::onCreate()
 	m_sky_mesh = GraphicsEngine::get()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\sphere.obj");
 
 	m_sphere_mesh = GraphicsEngine::get()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\sphere.obj");
+	m_brick_tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\brick_d.jpg");
 
 
 
@@ -246,6 +247,9 @@ void BumpMappingDemo::onCreate()
 	m_sky_mat->addTexture(m_sky_tex);
 	m_sky_mat->setCullMode(CULL_MODE_FRONT);
 
+	m_brick_mat = GraphicsEngine::get()->createMaterial(m_base_mat);
+	m_brick_mat->addTexture(m_brick_tex);
+	m_brick_mat->setCullMode(CULL_MODE_BACK);
 
 	m_world_cam.setTranslation(Vector3D(0, 0, -2));
 
