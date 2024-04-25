@@ -91,6 +91,7 @@ private:
 	float m_forward = 0.0f;
 	float m_rightward = 0.0f;
 
+	bool m_turbo_mode = false;
 	bool cull = true;
 	Matrix4x4 m_world_cam;
 	Matrix4x4 m_view_cam;
