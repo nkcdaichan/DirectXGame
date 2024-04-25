@@ -179,6 +179,9 @@
     <ClInclude Include="SpaceShooterActionGame.h">
       <Filter>App\SpaceShooterActionGame</Filter>
     </ClInclude>
+    <ClInclude Include="MathUtils.h">
+      <Filter>GameEngine\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="App">
