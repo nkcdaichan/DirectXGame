@@ -49,6 +49,7 @@ private:
 
 	MeshPtr m_sphere_mesh;
 	TexturePtr m_brick_tex;
+	TexturePtr m_brick_normal_tex;
 	MaterialPtr m_brick_mat;
 
 

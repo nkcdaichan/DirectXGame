@@ -28,6 +28,12 @@
     <FxCompile Include="SkyBoxPixelShader.hlsl">
       <Filter>App\GrobalShaders\SkyBox</Filter>
     </FxCompile>
+    <FxCompile Include="DirLightBumpVS.hlsl">
+      <Filter>App\GrobalShaders\DirLightBumpMapping</Filter>
+    </FxCompile>
+    <FxCompile Include="DirLightBumpPS.hlsl">
+      <Filter>App\GrobalShaders\DirLightBumpMapping</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DeviceContext.cpp">
@@ -270,6 +276,9 @@
     </Filter>
     <Filter Include="App\BumpMappingDemo">
       <UniqueIdentifier>{f0a29fbb-8998-4c0b-b82b-aeac8c8a8c98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App\GrobalShaders\DirLightBumpMapping">
+      <UniqueIdentifier>{73d8fec1-c981-4304-ae07-4a66febe75b8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -39,7 +39,8 @@ void BumpMappingDemo::render()
 	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top);
 
 	m_list_materials.clear();
-	updateModel(Vector3D(0, 0, 0), Vector3D(), Vector3D(1.5, 1.5, 1.5), m_list_materials);
+	m_list_materials.push_back(m_brick_mat);
+	updateModel(Vector3D(0, 0, 0), Vector3D(), Vector3D(1, 1, 1), m_list_materials);
 	drawMesh(m_sphere_mesh, m_list_materials);
 
 
@@ -237,6 +238,7 @@ void BumpMappingDemo::onCreate()
 
 	m_sphere_mesh = GraphicsEngine::get()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\sphere.obj");
 	m_brick_tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\brick_d.jpg");
+	m_brick_normal_tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\brick_n.jpg");
 
 
 
@@ -247,8 +249,9 @@ void BumpMappingDemo::onCreate()
 	m_sky_mat->addTexture(m_sky_tex);
 	m_sky_mat->setCullMode(CULL_MODE_FRONT);
 
-	m_brick_mat = GraphicsEngine::get()->createMaterial(m_base_mat);
+	m_brick_mat = GraphicsEngine::get()->createMaterial(L"DirLightBumpVS.hlsl", L"DirLightBumpPS.hlsl");
 	m_brick_mat->addTexture(m_brick_tex);
+	m_brick_mat->addTexture(m_brick_normal_tex);
 	m_brick_mat->setCullMode(CULL_MODE_BACK);
 
 	m_world_cam.setTranslation(Vector3D(0, 0, -2));
