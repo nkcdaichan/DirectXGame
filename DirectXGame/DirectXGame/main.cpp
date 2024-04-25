@@ -1,4 +1,4 @@
-#include "SpaceShooterActionGame.h"
+#include "BumpMappingDemo.h"
 #include "InputSystem.h"
 
 
@@ -14,7 +14,7 @@ int main()
 	{
 		try
 		{
-			SpaceShooterActionGame app;
+			BumpMappingDemo app;
 			while (app.isRun());
 		}
 		catch (...) {

@@ -126,7 +126,9 @@ bool Window::broadcast()
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
-
+    
+	this->onUpdate();
+    
 	Sleep(1);
 
 	return true;

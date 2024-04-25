@@ -93,6 +93,9 @@
     <ClCompile Include="SpaceShooterActionGame.cpp">
       <Filter>App\SpaceShooterActionGame</Filter>
     </ClCompile>
+    <ClCompile Include="BumpMappingDemo.cpp">
+      <Filter>App\BumpMappingDemo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceContext.h">
@@ -182,6 +185,9 @@
     <ClInclude Include="MathUtils.h">
       <Filter>GameEngine\Math</Filter>
     </ClInclude>
+    <ClInclude Include="BumpMappingDemo.h">
+      <Filter>App\BumpMappingDemo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="App">
@@ -261,6 +267,9 @@
     </Filter>
     <Filter Include="App\GrobalShaders\PointLight">
       <UniqueIdentifier>{dd46bac4-23f3-4ce9-a3ce-d2d02dde54da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App\BumpMappingDemo">
+      <UniqueIdentifier>{f0a29fbb-8998-4c0b-b82b-aeac8c8a8c98}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
