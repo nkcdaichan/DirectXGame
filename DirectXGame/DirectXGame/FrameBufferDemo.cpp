@@ -361,9 +361,9 @@ void FrameBufferDemo::onMouseMove(const Point & mouse_pos)
 	InputSystem::get()->setCursorPosition(Point(win_size.left + (int)(width / 2.0f), win_size.top + (int)(height / 2.0f)));
 
 	if (!m_play_state)
+	{
 		m_mini_game.onMouseMove(mouse_pos);
-		return;
-
+	}
 }
 
 void FrameBufferDemo::onLeftMouseDown(const Point & mouse_pos)
