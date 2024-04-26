@@ -102,6 +102,12 @@
     <ClCompile Include="BumpMappingDemo.cpp">
       <Filter>App\BumpMappingDemo</Filter>
     </ClCompile>
+    <ClCompile Include="FrameBufferDemo.cpp">
+      <Filter>App\FrameBufferDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="MiniGame.cpp">
+      <Filter>App\FrameBufferDemo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceContext.h">
@@ -194,6 +200,15 @@
     <ClInclude Include="BumpMappingDemo.h">
       <Filter>App\BumpMappingDemo</Filter>
     </ClInclude>
+    <ClInclude Include="FrameBufferDemo.h">
+      <Filter>App\FrameBufferDemo</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.h">
+      <Filter>GameEngine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniGame.h">
+      <Filter>App\FrameBufferDemo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="App">
@@ -279,6 +294,9 @@
     </Filter>
     <Filter Include="App\GrobalShaders\DirLightBumpMapping">
       <UniqueIdentifier>{73d8fec1-c981-4304-ae07-4a66febe75b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App\FrameBufferDemo">
+      <UniqueIdentifier>{9e25675b-5ec2-4900-91e5-cc75a1a7e46d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-#include "BumpMappingDemo.h"
+#include "FrameBufferDemo.h"
 #include "InputSystem.h"
 
 
@@ -14,7 +14,7 @@ int main()
 	{
 		try
 		{
-			BumpMappingDemo app;
+			FrameBufferDemo app;
 			while (app.isRun());
 		}
 		catch (...) {
