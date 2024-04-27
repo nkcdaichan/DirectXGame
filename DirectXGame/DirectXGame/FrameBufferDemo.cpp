@@ -232,12 +232,12 @@ void FrameBufferDemo::onCreate()
 	m_swap_chain = GraphicsEngine::get()->getRenderSystem()->createSwapChain(this->m_hwnd,
 		rc.right - rc.left, rc.bottom - rc.top);
 
-	m_sky_tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\stars_map.jpg");
-	m_sky_mesh = GraphicsEngine::get()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\sphere.obj");
+	m_sky_tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets//Textures//stars_map.jpg");
+	m_sky_mesh = GraphicsEngine::get()->getMeshManager()->createMeshFromFile(L"Assets//Meshes//sphere.obj");
 
-	m_monitor_mesh = GraphicsEngine::get()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\monitor.obj");
-	m_brick_tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\brick_d.jpg");
-	m_brick_normal_tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\brick_n.jpg");
+	m_monitor_mesh = GraphicsEngine::get()->getMeshManager()->createMeshFromFile(L"Assets//Meshes//monitor.obj");
+	m_brick_tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets//Textures//brick_d.jpg");
+	m_brick_normal_tex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets//Textures//brick_n.jpg");
 
 	
 	m_base_mat = GraphicsEngine::get()->createMaterial(L"DirectionalLightVertexShader.hlsl", L"DirectionalLightPixelShader.hlsl");
