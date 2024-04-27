@@ -29,6 +29,11 @@ struct constant
 	float m_time = 0.0f;
 };
 
+__declspec(align(16))
+struct DistortionEffectData
+{
+	float m_distortion_level = 0.0f;
+};
 
 PostProcessingDemo::PostProcessingDemo()
 {
@@ -79,14 +84,18 @@ void PostProcessingDemo::render()
 	RECT rc = this->getClientWindowRect();
 	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top);
 
+	DistortionEffectData effect_data;
+	effect_data.m_distortion_level = m_distortion_level;
 
 	m_list_materials.clear();
 	m_list_materials.push_back(m_post_process_mat);
+	m_post_process_mat->setData(&effect_data, sizeof(DistortionEffectData));
+
 	drawMesh(m_quad_mesh, m_list_materials);
 
-
-
 	m_swap_chain->present(true);
+
+
 
 
 	m_old_delta = m_new_delta;
@@ -220,7 +229,7 @@ void PostProcessingDemo::updateThirdPersonCamera()
 	{
 		if (m_turbo_mode)
 		{
-			if (m_forward > 0.0f) m_cam_distance = 25.0f;
+			if (m_forward > 0.0f) m_cam_distance = 19.0f;
 			else m_cam_distance = 5.0f;
 		}
 		else
@@ -325,9 +334,19 @@ void PostProcessingDemo::updateSpaceship()
 
 	if (m_turbo_mode)
 	{
-		m_spaceship_speed = 305.0f;
-	}
+		m_spaceship_speed = 400.0f;
 
+		if (m_forward != 0.0f)
+		{
+			m_distortion_level -= m_delta_time * 0.4f;
+			if (m_distortion_level <= 0.6f) m_distortion_level = 0.6f;
+		}
+	}
+	else 
+	{
+		m_distortion_level += m_delta_time * 0.4f;
+		if (m_distortion_level >= 1.0f) m_distortion_level = 1.0f;
+	}
 
 	m_spaceship_pos = m_spaceship_pos + world_model.getZDirection() * (m_forward)* m_spaceship_speed * m_delta_time;
 	m_current_spaceship_pos = Vector3D::lerp(m_current_spaceship_pos, m_spaceship_pos, 3.0f * m_delta_time);
