@@ -56,20 +56,23 @@ void MiniGame::render()
 	m_list_materials.push_back(m_spaceship_mat);
 	updateModel(m_current_spaceship_pos, m_current_spaceship_rot, Vector3D(1, 1, 1), m_list_materials);
 	drawMesh(m_spaceship_mesh, m_list_materials);
-
+    
+	
+	// RENDER ASTEROID
 	m_list_materials.clear();
 	m_list_materials.push_back(m_asteroid_mat);
-	// RENDER ASTEROID
 	for (unsigned int i = 0; i < 200; i++)
 	{
 		updateModel(m_asteroids_pos[i], m_asteroids_rot[i], m_asteroids_scale[i], m_list_materials);
 		drawMesh(m_asteroid_mesh, m_list_materials);
 	}
 
+
 	//RENDER SKYBOX/SPHERE
 	m_list_materials.clear();
 	m_list_materials.push_back(m_sky_mat);
 	drawMesh(m_sky_mesh, m_list_materials);
+
 
 	m_old_delta = m_new_delta;
 	m_new_delta = ::GetTickCount();

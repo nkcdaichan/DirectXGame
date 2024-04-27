@@ -258,7 +258,6 @@ void FrameBufferDemo::onCreate()
 	m_monitor_mat->setCullMode(CULL_MODE_BACK);
 
 	m_screen_mat = GraphicsEngine::get()->createMaterial(m_base_mat);
-	m_screen_mat->addTexture(m_brick_normal_tex);
 	m_screen_mat->setCullMode(CULL_MODE_BACK);
 
 	m_world_cam.setTranslation(Vector3D(0, 0, -2));
@@ -328,7 +327,6 @@ void FrameBufferDemo::onKeyUp(int key)
 		if (m_play_state)
 		{
 			m_play_state = false;
-			InputSystem::get()->showCursor(!m_play_state);
 		}
 		else if (!m_play_state)
 		{
@@ -346,7 +344,6 @@ void FrameBufferDemo::onKeyUp(int key)
 
 void FrameBufferDemo::onMouseMove(const Point & mouse_pos)
 {
-
 	RECT win_size = this->getClientWindowRect();
 
 	int width = (win_size.right - win_size.left);
@@ -361,13 +358,13 @@ void FrameBufferDemo::onMouseMove(const Point & mouse_pos)
 	InputSystem::get()->setCursorPosition(Point(win_size.left + (int)(width / 2.0f), win_size.top + (int)(height / 2.0f)));
 
 	if (!m_play_state)
-	{
 		m_mini_game.onMouseMove(mouse_pos);
-	}
+		
 }
 
 void FrameBufferDemo::onLeftMouseDown(const Point & mouse_pos)
 {
+	m_mini_game.onLeftMouseDown(mouse_pos);
 }
 
 void FrameBufferDemo::onLeftMouseUp(const Point & mouse_pos)

@@ -21,7 +21,7 @@ Mesh::Mesh(const wchar_t* full_path) : Resource(full_path)
 
 	std::string inputfile = std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(full_path);
 
-	std::string mtldir = inputfile.substr(0, inputfile.find_last_of("\\"));
+	std::string mtldir = inputfile.substr(0, inputfile.find_last_of("\\/"));
 
 	bool res = tinyobj::LoadObj(&attribs, &shapes, &materials, &warn, &err, inputfile.c_str(), mtldir.c_str());
 
