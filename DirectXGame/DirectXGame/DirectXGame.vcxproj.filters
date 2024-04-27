@@ -34,6 +34,12 @@
     <FxCompile Include="DirLightBumpPS.hlsl">
       <Filter>App\GrobalShaders\DirLightBumpMapping</Filter>
     </FxCompile>
+    <FxCompile Include="PostProcessVS.hlsl">
+      <Filter>App\GrobalShaders\PostProcessEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="DistortionEffect.hlsl">
+      <Filter>App\GrobalShaders\PostProcessEffect</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DeviceContext.cpp">
@@ -107,6 +113,9 @@
     </ClCompile>
     <ClCompile Include="MiniGame.cpp">
       <Filter>App\FrameBufferDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcessingDemo.cpp">
+      <Filter>App\PostProcessingDemo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -209,6 +218,9 @@
     <ClInclude Include="MiniGame.h">
       <Filter>App\FrameBufferDemo</Filter>
     </ClInclude>
+    <ClInclude Include="PostProcessingDemo.h">
+      <Filter>App\PostProcessingDemo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="App">
@@ -297,6 +309,12 @@
     </Filter>
     <Filter Include="App\FrameBufferDemo">
       <UniqueIdentifier>{9e25675b-5ec2-4900-91e5-cc75a1a7e46d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App\PostProcessingDemo">
+      <UniqueIdentifier>{610cb935-fe47-40fe-85c9-189ff655f014}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App\GrobalShaders\PostProcessEffect">
+      <UniqueIdentifier>{c360b58f-3543-4579-8759-830254abad0d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

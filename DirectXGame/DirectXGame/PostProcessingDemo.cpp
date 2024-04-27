@@ -1,4 +1,4 @@
-#include "MiniGame.h"
+#include "PostProcessingDemo.h"
 #include <Windows.h>
 #include "Vector3D.h"
 #include "Vector2D.h"
@@ -30,25 +30,22 @@ struct constant
 };
 
 
-MiniGame::MiniGame()
+PostProcessingDemo::PostProcessingDemo()
 {
 }
 
-void MiniGame::render()
+void PostProcessingDemo::render()
 {
-	//CLEAR THE RENDER TARGET 
+
+	//SCENE RENDERED TO RENDER TARGET
+	//-------------------------------
 	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_render_target,
 		0, 0.3f, 0.4f, 1);
-
 	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->clearDepthStencil(this->m_depth_stencil);
-
-	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setRenderTarget(
-		this->m_render_target,
-		this->m_depth_stencil);
+	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setRenderTarget(this->m_render_target, this->m_depth_stencil);
 
 	//SET VIEWPORT OF RENDER TARGET IN WHICH WE HAVE TO DRAW
 	Rect viewport_size = m_render_target->getSize();
-
 	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setViewportSize(viewport_size.width, viewport_size.height);
 
 	//RENDER SPACESHIP
@@ -56,22 +53,40 @@ void MiniGame::render()
 	m_list_materials.push_back(m_spaceship_mat);
 	updateModel(m_current_spaceship_pos, m_current_spaceship_rot, Vector3D(1, 1, 1), m_list_materials);
 	drawMesh(m_spaceship_mesh, m_list_materials);
-    
-	
-	// RENDER ASTEROID
+
 	m_list_materials.clear();
 	m_list_materials.push_back(m_asteroid_mat);
+	// RENDER ASTEROID
 	for (unsigned int i = 0; i < 200; i++)
 	{
+
 		updateModel(m_asteroids_pos[i], m_asteroids_rot[i], m_asteroids_scale[i], m_list_materials);
 		drawMesh(m_asteroid_mesh, m_list_materials);
 	}
 
+	//-------------------------------
 
 	//RENDER SKYBOX/SPHERE
 	m_list_materials.clear();
 	m_list_materials.push_back(m_sky_mat);
 	drawMesh(m_sky_mesh, m_list_materials);
+
+
+	//CLEAR THE RENDER TARGET 
+	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_swap_chain,
+		0, 0.3f, 0.4f, 1);
+	//SET VIEWPORT OF RENDER TARGET IN WHICH WE HAVE TO DRAW
+	RECT rc = this->getClientWindowRect();
+	GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top);
+
+
+	m_list_materials.clear();
+	m_list_materials.push_back(m_post_process_mat);
+	drawMesh(m_quad_mesh, m_list_materials);
+
+
+
+	m_swap_chain->present(true);
 
 
 	m_old_delta = m_new_delta;
@@ -82,7 +97,7 @@ void MiniGame::render()
 	m_time += m_delta_time;
 }
 
-void MiniGame::update()
+void PostProcessingDemo::update()
 {
 	updateSpaceship();
 	updateThirdPersonCamera();
@@ -90,7 +105,7 @@ void MiniGame::update()
 	updateSkyBox();
 }
 
-void MiniGame::updateModel(Vector3D position, Vector3D rotation, Vector3D scale, const std::vector<MaterialPtr>& list_materials)
+void PostProcessingDemo::updateModel(Vector3D position, Vector3D rotation, Vector3D scale, const std::vector<MaterialPtr>& list_materials)
 {
 	constant cc;
 
@@ -126,14 +141,13 @@ void MiniGame::updateModel(Vector3D position, Vector3D rotation, Vector3D scale,
 	cc.m_light_radius = 0.0f;
 	cc.m_light_direction = m_light_rot_matrix.getZDirection();
 	cc.m_time = m_time;
-
 	for (size_t m = 0; m < list_materials.size(); m++)
 	{
 		list_materials[m]->setData(&cc, sizeof(constant));
 	}
 }
 
-void MiniGame::updateCamera()
+void PostProcessingDemo::updateCamera()
 {
 	Matrix4x4 world_cam, temp;
 	world_cam.setIdentity();
@@ -166,13 +180,15 @@ void MiniGame::updateCamera()
 
 	m_view_cam = world_cam;
 
-	
+	int width = (this->getClientWindowRect().right - this->getClientWindowRect().left);
+	int height = (this->getClientWindowRect().bottom - this->getClientWindowRect().top);
 
-	/*m_proj_cam.setPerspectiveFovLH(1.57f, ((float)width / (float)height), 0.1f, 600.0f);
-*/
+
+	m_proj_cam.setPerspectiveFovLH(1.57f, ((float)width / (float)height), 0.1f, 600.0f);
+
 }
 
-void MiniGame::updateThirdPersonCamera()
+void PostProcessingDemo::updateThirdPersonCamera()
 {
 	Matrix4x4 world_cam, temp;
 	world_cam.setIdentity();
@@ -238,11 +254,14 @@ void MiniGame::updateThirdPersonCamera()
 
 	m_view_cam = world_cam;
 
-	updateViewportProjection();
+	int width = (this->getClientWindowRect().right - this->getClientWindowRect().left);
+	int height = (this->getClientWindowRect().bottom - this->getClientWindowRect().top);
 
+
+	m_proj_cam.setPerspectiveFovLH(1.57f, ((float)width / (float)height), 0.1f, 5000.0f);
 }
 
-void MiniGame::updateSkyBox()
+void PostProcessingDemo::updateSkyBox()
 {
 	constant cc;
 
@@ -255,7 +274,7 @@ void MiniGame::updateSkyBox()
 	m_sky_mat->setData(&cc, sizeof(constant));
 }
 
-void MiniGame::updateLight()
+void PostProcessingDemo::updateLight()
 {
 	Matrix4x4 temp;
 	m_light_rot_matrix.setIdentity();
@@ -274,7 +293,7 @@ void MiniGame::updateLight()
 
 }
 
-void MiniGame::updateSpaceship()
+void PostProcessingDemo::updateSpaceship()
 {
 	Matrix4x4 world_model, temp;
 	world_model.setIdentity();
@@ -315,62 +334,45 @@ void MiniGame::updateSpaceship()
 
 }
 
-void MiniGame::drawMesh(const MeshPtr & mesh, const std::vector<MaterialPtr> & list_materials)
+void PostProcessingDemo::drawMesh(const MeshPtr & mesh, const std::vector<MaterialPtr> & list_materials)
 {
 	
-	for (unsigned int m = 0; m < list_materials.size(); m++)
+	for (size_t m = 0; m < mesh->getNumMaterialSlots(); m++)
 	{
-		if (m == list_materials.size())break;
-       /* for (size_t m = 0; m < mesh->getNumMaterialSlots(); m++)*/
-	    
-		    //if (m >= list_materials.size()) break;
+		if (m >= list_materials.size()) break;
 
+		MaterialSlot mat = mesh->getMaterialSlot(m);
 
-	    MaterialSlot mat = mesh->getMaterialSlot(m);
-	    GraphicsEngine::get()->setMaterial(list_materials[m]);
+		GraphicsEngine::get()->setMaterial(list_materials[m]);
+
 		//SET THE VERTICES OF THE TRIANGLE TO DRAW
 		GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setVertexBuffer(mesh->getVertexBuffer());
 		//SET THE INDICES OF THE TRIANGLE TO DRAW
 		GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->setIndexBuffer(mesh->getIndexBuffer());
-
-	    // FINALLY DRAW THE TRIANGLE
-	    GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->drawIndexedTriangleList((UINT)mat.num_indices, 0, mat.start_index);
-	    
-
+		// FINALLY DRAW THE TRIANGLE
+		GraphicsEngine::get()->getRenderSystem()->getImmediateDeviceContext()->drawIndexedTriangleList(mat.num_indices, 0, mat.start_index);
 	}
-	
-}
 
-void MiniGame::updateViewportProjection()
-{/*
-	int width = (this->getClientWindowRect().right - this->getClientWindowRect().left);
-	int height = (this->getClientWindowRect().bottom - this->getClientWindowRect().top);
-
-	m_proj_cam.setPerspectiveFovLH(1.57f, ((float)width / (float)height), 0.1f, 5000.0f);
-*/
 }
 
 
 
 
-MiniGame::~MiniGame()
+PostProcessingDemo::~PostProcessingDemo()
 {
 }
 
-void MiniGame::setWindowSize(const Rect& size)
+void PostProcessingDemo::onCreate()
 {
-	m_window_size = size;
-}
+	Window::onCreate();
 
-TexturePtr& MiniGame::getRenderTarget()
-{
-	// TODO: return ステートメントをここに挿入します
-	return m_render_target;
-}
+	InputSystem::get()->addListener(this);
 
-void MiniGame::onCreate()
-{
 	m_play_state = true;
+	InputSystem::get()->showCursor(false);
+	RECT rc = this->getClientWindowRect();
+	m_swap_chain = GraphicsEngine::get()->getRenderSystem()->createSwapChain(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
+
 	srand((unsigned int)time(NULL));
 
 
@@ -409,19 +411,48 @@ void MiniGame::onCreate()
 	m_sky_mat->addTexture(m_sky_tex);
 	m_sky_mat->setCullMode(CULL_MODE_FRONT);
 
+	m_post_process_mat = GraphicsEngine::get()->createMaterial(L"PostProcessVS.hlsl", L"DistortionEffect.hlsl");
+	m_post_process_mat->setCullMode(CULL_MODE_BACK);
+
+
 	m_world_cam.setTranslation(Vector3D(0, 0, -2));
 
+	VertexMesh quad_vertex_list[] = {
+		VertexMesh(Vector3D(-1,-1,0),Vector2D(0,1),Vector3D(),Vector3D(),Vector3D()),
+		VertexMesh(Vector3D(-1, 1,0),Vector2D(0,0),Vector3D(),Vector3D(),Vector3D()),
+        VertexMesh(Vector3D( 1, 1,0),Vector2D(1,0),Vector3D(),Vector3D(),Vector3D()),
+        VertexMesh(Vector3D( 1,-1,0),Vector2D(1,1),Vector3D(),Vector3D(),Vector3D())
+	};
+
+
+	unsigned int quad_index_list[] = {
+		0,1,2,
+		2,3,0
+
+	};
+
+	MaterialSlot quad_mat_slots[] = {
+		{0, 6, 0}
+     };
+
+	m_quad_mesh = GraphicsEngine::get()->getMeshManager()->createMesh(quad_vertex_list, 4, quad_index_list, 6, quad_mat_slots, 1);
+
+
 	m_list_materials.reserve(32);
-
-	m_render_target = GraphicsEngine::get()->getTextureManager()->createTexture(Rect(1280, 720), Texture::Type::RenderTarget);
-	m_depth_stencil = GraphicsEngine::get()->getTextureManager()->createTexture(Rect(1280, 720), Texture::Type::DepthStencil);
-
-	m_proj_cam.setPerspectiveFovLH(1.57f, ((float)1280 / (float)720), 0.1f, 5000.0f);
 	
+	m_render_target = GraphicsEngine::get()->getTextureManager()->createTexture(Rect(rc.right - rc.left, rc.bottom - rc.top), Texture::Type::RenderTarget);
+	m_depth_stencil = GraphicsEngine::get()->getTextureManager()->createTexture(Rect(rc.right - rc.left, rc.bottom - rc.top), Texture::Type::DepthStencil);
+
+
+	m_post_process_mat->addTexture(m_render_target);
 }
 
-void MiniGame::onUpdate()
+void PostProcessingDemo::onUpdate()
 {
+	Window::onUpdate();
+	InputSystem::get()->update();
+
+
 	this->update();
 	this->render();
 
@@ -430,25 +461,40 @@ void MiniGame::onUpdate()
 
 }
 
-void MiniGame::onDestroy()
-{	
+void PostProcessingDemo::onDestroy()
+{
+	Window::onDestroy();
+	m_swap_chain->SetFullScreen(false, 1, 1);
 }
 
-void MiniGame::onFocus()
+void PostProcessingDemo::onFocus()
 {
+	InputSystem::get()->addListener(this);
 }
 
-void MiniGame::onKillFocus()
+void PostProcessingDemo::onKillFocus()
 {
+	InputSystem::get()->removeListener(this);
 }
 
-void MiniGame::onSize()
+void PostProcessingDemo::onSize()
 {
+	RECT rc = this->getClientWindowRect();
+	m_swap_chain->resize(rc.right - rc.left, rc.bottom - rc.top);
+
+	m_render_target = GraphicsEngine::get()->getTextureManager()->createTexture(Rect(rc.right - rc.left, rc.bottom - rc.top), Texture::Type::RenderTarget);
+	m_depth_stencil = GraphicsEngine::get()->getTextureManager()->createTexture(Rect(rc.right - rc.left, rc.bottom - rc.top), Texture::Type::DepthStencil);
+
+
+	m_post_process_mat->removeTexture(0);
+	m_post_process_mat->addTexture(m_render_target);
+
+	this->update();
+	this->render();
 }
 
-void MiniGame::onKeyDown(int key)
+void PostProcessingDemo::onKeyDown(int key)
 {
-	
 	if (key == 'W')
 	{
 		m_forward = 1.0f;
@@ -471,42 +517,69 @@ void MiniGame::onKeyDown(int key)
 	}
 }
 
-void MiniGame::onKeyUp(int key)
+void PostProcessingDemo::onKeyUp(int key)
 {
 	m_forward = 0.0f;
 	m_rightward = 0.0f;
 
-	if (key == VK_SHIFT)
+	if (key == VK_ESCAPE)
+	{
+		if (m_play_state)
+		{
+			m_play_state = false;
+			InputSystem::get()->showCursor(!m_play_state);
+		}
+	}
+	else if (key == 'F')
+	{
+		m_fullscreen_state = (m_fullscreen_state) ? false : true;
+		RECT size_screen = this->getSizeScreen();
+
+		m_swap_chain->SetFullScreen(m_fullscreen_state, size_screen.right, size_screen.bottom);
+	}
+	else if (key == VK_SHIFT)
 	{
 		m_turbo_mode = false;
 	}
 }
 
 //マウスカーソルへの処理
-void MiniGame::onMouseMove(const Point & mouse_pos)
+void PostProcessingDemo::onMouseMove(const Point & mouse_pos)
 {
-	int width = (m_window_size.width);
-	int height = (m_window_size.height);
+	if (!m_play_state) return;
 
-	m_delta_mouse_x = (float)(mouse_pos.m_x - (m_window_size.left + (width / 2.0f)));
-	m_delta_mouse_y = (float)(mouse_pos.m_y - (m_window_size.top + (height / 2.0f)));
-	
+	RECT win_size = this->getClientWindowRect();
+
+	int width = (win_size.right - win_size.left);
+	int height = (win_size.bottom - win_size.top);
+
+	m_delta_mouse_x = (int)(mouse_pos.m_x - (int)(win_size.left + (width / 2.0f)));
+	m_delta_mouse_y = (int)(mouse_pos.m_y - (int)(win_size.top + (height / 2.0f)));
+
+
+	InputSystem::get()->setCursorPosition(Point(win_size.left + (int)(width / 2.0f), win_size.top + (int)(height / 2.0f)));
 }
 
-void MiniGame::onLeftMouseDown(const Point & mouse_pos)
+void PostProcessingDemo::onLeftMouseDown(const Point & mouse_pos)
+{
+	if (!m_play_state)
+	{
+		m_play_state = true;
+		InputSystem::get()->showCursor(!m_play_state);
+	}
+}
+
+void PostProcessingDemo::onLeftMouseUp(const Point & mouse_pos)
+{
+
+}
+
+void PostProcessingDemo::onRightMouseDown(const Point & mouse_pos)
+{
+
+}
+
+void PostProcessingDemo::onRightMouseUp(const Point & mouse_pos)
 {
 }
 
-void MiniGame::onLeftMouseUp(const Point & mouse_pos)
-{
-
-}
-
-void MiniGame::onRightMouseDown(const Point & mouse_pos)
-{
-
-}
-
-void MiniGame::onRightMouseUp(const Point & mouse_pos)
-{
-}

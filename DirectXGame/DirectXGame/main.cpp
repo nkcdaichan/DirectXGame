@@ -1,4 +1,4 @@
-#include "FrameBufferDemo.h"
+#include "PostProcessingDemo.h"
 #include "InputSystem.h"
 
 
@@ -14,7 +14,7 @@ int main()
 	{
 		try
 		{
-			FrameBufferDemo app;
+			PostProcessingDemo app;
 			while (app.isRun());
 		}
 		catch (...) {
