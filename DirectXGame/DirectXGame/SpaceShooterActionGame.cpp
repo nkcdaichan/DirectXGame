@@ -30,7 +30,7 @@ struct constant
 };
 
 
-SpaceShooterActionGame::SpaceShooterActionGame()
+SpaceShooterActionGame::SpaceShooterActionGame() : m_spaceship_health(100)
 {
 }
 
@@ -303,11 +303,46 @@ void SpaceShooterActionGame::updateSpaceship()
 
 	m_spaceship_speed = 125.0f;
 
-	if (m_turbo_mode) 
+	if (m_forward)
 	{
-		m_spaceship_speed = 305.0f;
+		if (m_turbo_mode)
+		{
+			// 突進中かつターボモードが有効な場合のスピード設定
+			m_spaceship_speed = (m_forward > 0.0f) ? 305.0f : -305.0f; // 前進か後退かに応じて正負を設定
+		}
+		else
+		{
+			// 突進中だがターボモードが無効な場合のスピード設定
+			m_spaceship_speed = (m_forward > 0.0f) ? 125.0f : -125.0f; // 前進か後退かに応じて正負を設定
+		}
+	}
+	else
+	{
+		// 突進していない場合はデフォルトのスピードを設定
+		m_spaceship_speed = 0.0f;
 	}
 
+	// Asteroidとの当たり判定を行う
+	for (int i = 0; i < 200; ++i)
+	{
+		Vector3D dist = m_spaceship_pos - m_asteroids_pos[i]; // SpaceshipとAsteroidの距離ベクトルを計算
+		float distance = dist.length(); // ベクトルの長さを取得
+
+		// 一定の距離以内で当たりとみなす
+		if (distance < (m_spaceship_radius + m_asteroids_radius))
+		{
+			// Spaceshipにダメージを与える
+			m_spaceship_health -= 10; // 仮にダメージを10とする
+			 // m_spaceship_healthが0以下になったらSpaceshipを消す
+			if (m_spaceship_health <= 0)
+			{
+				// Spaceshipを消す処理をここに追加する
+				// 例えば、Spaceshipの位置を画面外に移動させるなどの方法で消す
+				m_spaceship_pos = Vector3D(99999, 99999, 99999); // 仮の位置に移動させる
+				m_spaceship_health = 0; // 念のため0に設定する
+			}
+		}
+	}
 
 	m_spaceship_pos = m_spaceship_pos + world_model.getZDirection() * (m_forward)*m_spaceship_speed * m_delta_time;
 	m_current_spaceship_pos = Vector3D::lerp(m_current_spaceship_pos, m_spaceship_pos, 3.0f * m_delta_time);
@@ -460,6 +495,10 @@ void SpaceShooterActionGame::onKeyDown(int key)
 	{	
 		m_rightward = -1.0f;
 	}
+	else if (key == 'R') 
+	{
+		m_spaceship_speed *= 1.5f; // スピードを増加させる
+	}
 	else if (key == VK_SHIFT)
 	{
 		m_turbo_mode = true;
@@ -511,10 +550,12 @@ void SpaceShooterActionGame::onMouseMove(const Point & mouse_pos)
 
 void SpaceShooterActionGame::onLeftMouseDown(const Point & mouse_pos)
 {
+	
 	if (!m_play_state)
 	{
 		m_play_state = true;
 		InputSystem::get()->showCursor(!m_play_state);
+		
 	}
 }
 

@@ -117,6 +117,9 @@
     <ClCompile Include="PostProcessingDemo.cpp">
       <Filter>App\PostProcessingDemo</Filter>
     </ClCompile>
+    <ClCompile Include="Asteroid.cpp">
+      <Filter>App\SpaceShooterActionGame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceContext.h">
@@ -220,6 +223,9 @@
     </ClInclude>
     <ClInclude Include="PostProcessingDemo.h">
       <Filter>App\PostProcessingDemo</Filter>
+    </ClInclude>
+    <ClInclude Include="Asteroid.h">
+      <Filter>App\SpaceShooterActionGame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -18,6 +18,8 @@ public:
 	SpaceShooterActionGame();
 	~SpaceShooterActionGame();
 
+	int m_spaceship_health; // Spaceship‚ÌHP
+
 	// Inherited via Window
 	virtual void onCreate() override;
 	virtual void onUpdate() override;
