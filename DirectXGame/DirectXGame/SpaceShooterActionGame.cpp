@@ -328,20 +328,7 @@ void SpaceShooterActionGame::updateSpaceship()
 		Vector3D dist = m_spaceship_pos - m_asteroids_pos[i]; // SpaceshipとAsteroidの距離ベクトルを計算
 		float distance = dist.length(); // ベクトルの長さを取得
 
-		// 一定の距離以内で当たりとみなす
-		if (distance < (m_spaceship_radius + m_asteroids_radius))
-		{
-			// Spaceshipにダメージを与える
-			m_spaceship_health -= 10; // 仮にダメージを10とする
-			 // m_spaceship_healthが0以下になったらSpaceshipを消す
-			if (m_spaceship_health <= 0)
-			{
-				// Spaceshipを消す処理をここに追加する
-				// 例えば、Spaceshipの位置を画面外に移動させるなどの方法で消す
-				m_spaceship_pos = Vector3D(99999, 99999, 99999); // 仮の位置に移動させる
-				m_spaceship_health = 0; // 念のため0に設定する
-			}
-		}
+		
 	}
 
 	m_spaceship_pos = m_spaceship_pos + world_model.getZDirection() * (m_forward)*m_spaceship_speed * m_delta_time;
