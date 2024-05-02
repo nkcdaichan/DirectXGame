@@ -2,7 +2,7 @@
 #include "InputSystem.h"
 
 
-int main()
+int main(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	try
 	{

@@ -120,6 +120,9 @@
     <ClCompile Include="Asteroid.cpp">
       <Filter>App\SpaceShooterActionGame</Filter>
     </ClCompile>
+    <ClCompile Include="Font2D.cpp">
+      <Filter>GameEngine\GraphicsEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceContext.h">
@@ -226,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="Asteroid.h">
       <Filter>App\SpaceShooterActionGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Font2D.h">
+      <Filter>GameEngine\GraphicsEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
