@@ -2,9 +2,9 @@
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
-#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
-#include <locale>
-#include <codecvt>
+//#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
+//#include <locale>
+//#include <codecvt>
 #include <filesystem>
 
 #include "GraphicsEngine.h"
@@ -19,7 +19,7 @@ Mesh::Mesh(const wchar_t* full_path) : Resource(full_path)
 	std::string warn;
 	std::string err;
 
-	std::string inputfile = std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(full_path);
+	std::string inputfile = std::filesystem::path(full_path).string();
 
 	std::string mtldir = inputfile.substr(0, inputfile.find_last_of("\\/"));
 
